@@ -4,7 +4,8 @@ import { SessionDocument } from "../interfaces/session.interface";
 import { signJwt, verifyJwt } from "../utils/jwt.utils";
 import { get } from "lodash";
 import { findUser } from "./user.service";
-import config from "config";
+//import config from "config";
+import "dotenv/config";
 
 export async function createSession(userId: string, userAgent: string) {
   const session = await SessionModel.create({
@@ -52,7 +53,8 @@ export async function reIssueAccessToken({
 
   const accessToken = signJwt(
     { ...user, session: session._id },
-    { expiresIn: config.get<string>("accessTokenExpire") } // 15 minutes
+    //{ expiresIn: config.get<string>("accessTokenExpire") } // 15 minutes
+    { expiresIn: process.env.ACC_TOKEN_EXPIRE as string }
   );
 
   return accessToken;

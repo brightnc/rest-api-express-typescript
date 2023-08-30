@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import config from "config";
+//import config from "config";
+import "dotenv/config";
 import { UserDocument } from "../interfaces/user.interface";
 
 const userSchema = new mongoose.Schema(
@@ -21,7 +22,7 @@ userSchema.pre("save", async function (next) {
     return next();
   }
 
-  const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
+  const salt = await bcrypt.genSalt(parseInt(process.env.SALT as string));
   const hash = bcrypt.hashSync(user.password, salt);
 
   user.password = hash;
